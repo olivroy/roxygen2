@@ -119,13 +119,17 @@ roxy_tag_warning <- function(x, ...) {
 
 #' @export
 #' @rdname roxy_tag
-warn_roxy_tag <- function(tag, message, ...) {
+warn_roxy_tag <- function(tag, message, ..., warn = TRUE) {
   message[[1]] <- paste0(
     link_to(tag$file, tag$line), " @", tag$tag, " ",
     if (is.null(tag$raw)) ("(automatically generated) "),
     message[[1]]
   )
-  cli::cli_warn(message, ..., .envir = parent.frame())
+  if (warn) {
+    cli::cli_warn(message, ..., .envir = parent.frame())
+  } else {
+    message
+  }
 }
 
 link_to <- function(file, line) {

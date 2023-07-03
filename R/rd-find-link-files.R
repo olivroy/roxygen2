@@ -48,7 +48,8 @@ find_topic_in_package <- function(pkg, topic) {
   on.exit(close(con), add = TRUE)
   con <- textConnection(topic)
   raw_topic <- str_trim(tools::parse_Rd(con)[[1]][1])
-  basename(utils::help((raw_topic), (pkg))[1])
+  name <- utils::help((raw_topic), (pkg))[1]
+  basename(name)
 }
 
 try_find_topic_in_package <- function(pkg, topic, tag) {
@@ -61,7 +62,8 @@ try_find_topic_in_package <- function(pkg, topic, tag) {
   )
 
   if (is.na(path)) {
-    warn_roxy_tag(tag, "refers to unavailable topic {pkg}::{topic}")
+    message <- warn_roxy_tag(tag, "refers to unavailable topic {pkg}::{topic}", warn = FALSE)
+    cli::cli_warn(message)
     topic
   } else {
     path
